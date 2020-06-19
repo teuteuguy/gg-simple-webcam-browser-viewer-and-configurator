@@ -8,7 +8,7 @@ const port = 3000;
 
 console.log('Will open and read from the following stream:', process.env.stream);
 
-const mjpegStream = fs.createReadStream(process.env.stream).pipe((new MjpegFrameStream())).on('frame', (frame) => {
+const mjpegStream = fs.createReadStream(process.env.stream, { highWaterMark: 16 * 128 * 1024 }).pipe((new MjpegFrameStream())).on('frame', (frame) => {
     io.emit(process.env.stream, {
         frame: frame.toString('base64')
     });
